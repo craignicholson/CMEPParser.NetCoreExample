@@ -4,73 +4,54 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-//using ETSS_ImporterService.Model;
 
-namespace ETSS_ImporterService
+namespace CMEPParser.NetCoreExample
 {
     class CMEPImporter
     {
-        //DataAccessLayer _dal;
 
-        //public CMEPImporter(DataAccessLayer dal)
-        //{
-        //    _dal = dal;
-        //}
-
-        public void Import(Import import)
+        public void Import(string cmepFilePath, string csvFilePath)
         {
             try
             {
-                DirectoryInfo di = new DirectoryInfo(@import.Path);
-                FileInfo[] fi = di.GetFiles(import.FileSpec);
+                DirectoryInfo di = new DirectoryInfo(cmepFilePath);
+
+                // Just load the CMEP files only from this directory. Also, only put CMEP files in this directory :-)
+                FileInfo[] fi = di.GetFiles("*.dat");
 
                 // Process each file found with the import extension
                 foreach (FileInfo fileInfo in fi)
                 {
                     Debug.Print("Importing CMEP file: " + fileInfo.FullName, "Information");
 
-                    string importLogId = null;
-
+                    // Intent is to be a primary key for a database record linking the filename to a record in the database
+                    // One might attempt to load a file multiple times... or have same data in different file names (correction files)
+                    // Not really needed for parsing CMEP to CSV
+                    string importLogId = "0";
                     try
                     {
-                        _dal.ImportLog_Insert(import.ImportSpecId,
-                                              fileInfo.Name,
-                                              Path.GetDirectoryName(fileInfo.FullName),
-                                              (int)fileInfo.Length,
-                                              Environment.UserName,
-                                              Environment.MachineName,
-                                              "CMEP",
-                                              out importLogId);
+                        // TODO: Log a history of this import somewhere
 
-                        ParseCMEP(fileInfo.FullName,
-                                  importLogId,
-                                  import.TableName);
+                        // ******************************************
+                        ParseCMEP(fileInfo.FullName, importLogId, csvFilePath);
+                        // ******************************************
 
-                        if ((import.SprocName != null) && (import.SprocName != ""))
-                            _dal.ExecuteImportSproc(import.SprocName,
-                                                    importLogId);
 
-                        Debug.Print(import.Name + " import completed.", "Information");
+                        Debug.Print("CMEP" + " import completed.", "Information");
 
                         File.Move(fileInfo.FullName,
                                   Path.ChangeExtension(fileInfo.FullName, ".don"));
 
-                        // update the import finish time
-                        _dal.ImportLog_Update(importLogId, false, null);
+                        // update the import running time, tracking the lenght of time may provide useful in the future
+                        Debug.Print("running time: hhmmss, date etc..");
 
                         string msg = "CMEP data file " + fileInfo.FullName + " imported. ImportLogId=" + importLogId;
-                        try
-                        {
-                            //Util.SendAlert(msg, "ImportCMEPFile");
-                        }
-                        catch { }
                     }
                     catch (IOException ex)
                     {
                         if (ex.Message.Contains("being used by another process"))
                         {
                             Debug.Print("File " + fileInfo.FullName + " is locked by another process. Unable to import now.", "Warning");
-                            _dal.ImportLog_Update(importLogId, true, ex.Message);
                         }
                         else
                         {
@@ -86,7 +67,7 @@ namespace ETSS_ImporterService
                         File.Move(fileInfo.FullName,
                                   Path.ChangeExtension(fileInfo.FullName, ".err"));
 
-                        _dal.ImportLog_Update(importLogId, true, ex.Message);
+                        Debug.Print(ex.Message);
 
                         string msg = "CMEP import failed for file " + fileInfo.FullName + ", ImportLogId=" + importLogId + ". Error: " + ex.Message;
                         //Util.SendAlert(msg, "ImportCMEPFail");
@@ -101,9 +82,9 @@ namespace ETSS_ImporterService
             }
         }
 
-        public void ParseCMEP(string filePath, 
+        public void ParseCMEP(string cmepfilePath, 
                               string importLogId,
-                              string tableName)
+                              string csvFilePath)
         {
             // init the table that will hold the intervals.   
             DataTable cmepInterval = new DataTable();
@@ -112,7 +93,7 @@ namespace ETSS_ImporterService
                 cmepInterval.Columns.Add(new DataColumn());
             }
 
-            using (StreamReader sr = File.OpenText(filePath))
+            using (StreamReader sr = File.OpenText(cmepfilePath))
             {
                 int lineCtr = 0;
                 int parentLine = 0;
@@ -230,7 +211,9 @@ namespace ETSS_ImporterService
                         // Bulk load the table if we have 100k rows
                         if (cmepInterval.Rows.Count >= 100000)
                         {
-                            _dal.BulkInsert(cmepInterval, tableName);
+                            //TODO: Add in extra file path naming to track all the different files we might create
+                            // during this testing phase
+                            ToCSV(cmepInterval, csvFilePath + ".0");
                             cmepInterval.Rows.Clear();
                         }
                     }
@@ -303,7 +286,7 @@ namespace ETSS_ImporterService
                         // Bulk load the table if we have 100k rows
                         if (cmepInterval.Rows.Count >= 100000)
                         {
-                            _dal.BulkInsert(cmepInterval, tableName);
+                            ToCSV(cmepInterval, csvFilePath + ".1");
                             cmepInterval.Rows.Clear();
                         }
                     }
@@ -368,7 +351,7 @@ namespace ETSS_ImporterService
                         // Bulk load the table if we have 100k rows
                         if (cmepInterval.Rows.Count >= 100000)
                         {
-                            _dal.BulkInsert(cmepInterval, tableName);
+                            ToCSV(cmepInterval, csvFilePath + ".2");
                             cmepInterval.Rows.Clear();
                         }
                     }
@@ -438,7 +421,7 @@ namespace ETSS_ImporterService
                         // Bulk load the table if we have 100k rows
                         if (cmepInterval.Rows.Count >= 100000)
                         {
-                            _dal.BulkInsert(cmepInterval, tableName);
+                            ToCSV(cmepInterval, csvFilePath + ".3");
                             cmepInterval.Rows.Clear();
                         }
                     }
@@ -448,10 +431,51 @@ namespace ETSS_ImporterService
             // Bulk load any remaining rows
             if (cmepInterval.Rows.Count > 0)
             {
-                _dal.BulkInsert(cmepInterval, tableName);
+                //_dal.BulkInsert(cmepInterval, tableName);
+                ToCSV(cmepInterval, csvFilePath + ".final");
             }
         }
 
+
+        private void ToCSV(DataTable dtDataTable, string strFilePath)
+        {
+            StreamWriter sw = new StreamWriter(strFilePath, false);
+            //headers  
+            for (int i = 0; i < dtDataTable.Columns.Count; i++)
+            {
+                sw.Write(dtDataTable.Columns[i]);
+                if (i < dtDataTable.Columns.Count - 1)
+                {
+                    sw.Write(",");
+                }
+            }
+            sw.Write(sw.NewLine);
+            foreach (DataRow dr in dtDataTable.Rows)
+            {
+                for (int i = 0; i < dtDataTable.Columns.Count; i++)
+                {
+                    if (!Convert.IsDBNull(dr[i]))
+                    {
+                        string value = dr[i].ToString();
+                        if (value.Contains(','))
+                        {
+                            value = String.Format("\"{0}\"", value);
+                            sw.Write(value);
+                        }
+                        else
+                        {
+                            sw.Write(dr[i].ToString());
+                        }
+                    }
+                    if (i < dtDataTable.Columns.Count - 1)
+                    {
+                        sw.Write(",");
+                    }
+                }
+                sw.Write(sw.NewLine);
+            }
+            sw.Close();
+        }
         /// <summary>
         /// Calculates a dateTime by taking a base startTime, time interval and the interval offset on the cmep row
         /// </summary>
