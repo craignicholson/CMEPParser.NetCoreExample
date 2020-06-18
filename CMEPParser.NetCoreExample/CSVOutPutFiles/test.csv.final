@@ -1,4 +1,4 @@
-Column1,Column2,Column3,Column4,Column5,Column6,Column7,Column8,Column9,Column10,Column11,Column12,Column13,Column14,Column15,Column16,Column17,Column18,Column19,Column20,Column21,Column22,Column23,Column24,Column25,Column26,Column27,Column28,Column29
+ImportlogId,readType,meterId,uom,readDate,readQC,readValue,touLabel,touDataStartTime,touDataTimestamp,recordType,recordVersion,senderId,senderCustomerId,receiverId,receiverCustomerId,recordCreateDate,purpose,commodity,constant,timeInterval,season,RegisterReadIndicator,Line,ParentLine0,ParentLine1,ParentLine2,ParentLine3,ParentLine4
 0,R,,GALREG,9/20/2011 12:02:00 AM,R0,36318,,,,MEPMD01,20080501,SENSUS,SPS:130000,15173624,B72842123,201109211458,OK,W,1.0,00000100,,Start,1,1,,,,
 0,R,,GALREG,9/20/2011 1:02:00 AM,R0,36328,,,,MEPMD01,20080501,SENSUS,SPS:130000,15173624,B72842123,201109211458,OK,W,1.0,00000100,,End,1,1,,,,
 0,R,,GALREG,9/20/2011 2:02:00 AM,R0,36328,,,,MEPMD01,20080501,SENSUS,SPS:130000,15173624,B72842123,201109211458,OK,W,1.0,00000100,,,1,1,,,,
