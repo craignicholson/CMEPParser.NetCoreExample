@@ -244,14 +244,14 @@ namespace CMEPParser.NetCoreExample
                                                                  null, null, null, null });
                         }
 
-                        // Bulk load the table if we have 100k rows
-                        if (cmepInterval.Rows.Count >= 100000)
-                        {
-                            //TODO: Add in extra file path naming to track all the different files we might create
-                            // during this testing phase
-                            ToCSV(cmepInterval, csvFilePath + ".0");
-                            cmepInterval.Rows.Clear();
-                        }
+                        //// Bulk load any remaining rows, does not need .0 if we are just dumping records to a database table.
+                        //if (cmepInterval.Rows.Count >= 100000)
+                        //{
+                        //    //TODO: Add in extra file path naming to track all the different files we might create
+                        //    // during this testing phase
+                        //    ToCSV(cmepInterval, csvFilePath + ".0");
+                        //    cmepInterval.Rows.Clear();
+                        //}
                     }
                     else if (fields[0] == "MEPMD02")  // TOU
                     {
@@ -319,12 +319,12 @@ namespace CMEPParser.NetCoreExample
                                                              null, null, null, null });
                         }
 
-                        // Bulk load the table if we have 100k rows
-                        if (cmepInterval.Rows.Count >= 100000)
-                        {
-                            ToCSV(cmepInterval, csvFilePath + ".1");
-                            cmepInterval.Rows.Clear();
-                        }
+                        //// Bulk load any remaining rows, does not need .1 if we are just dumping records to a database table.
+                        //if (cmepInterval.Rows.Count >= 100000)
+                        //{
+                        //    ToCSV(cmepInterval, csvFilePath + ".1");
+                        //    cmepInterval.Rows.Clear();
+                        //}
                     }
                     else if (fields[0] == "MLA01")  // Alarm Report
                     {
@@ -384,12 +384,12 @@ namespace CMEPParser.NetCoreExample
                                                              null, null, null, null }); //ParentLine
                         }
 
-                        // Bulk load the table if we have 100k rows
-                        if (cmepInterval.Rows.Count >= 100000)
-                        {
-                            ToCSV(cmepInterval, csvFilePath + ".2");
-                            cmepInterval.Rows.Clear();
-                        }
+                        //// Bulk load any remaining rows, does not need .2 if we are just dumping records to a database table.
+                        //if (cmepInterval.Rows.Count >= 100000)
+                        //{
+                        //    ToCSV(cmepInterval, csvFilePath + ".2");
+                        //    cmepInterval.Rows.Clear();
+                        //}
                     }
                     else if (fields[0] == "MEPEC01")  // Equipment Configuration
                     {
@@ -454,17 +454,17 @@ namespace CMEPParser.NetCoreExample
                             }
                         }
 
-                        // Bulk load the table if we have 100k rows
-                        if (cmepInterval.Rows.Count >= 100000)
-                        {
-                            ToCSV(cmepInterval, csvFilePath + ".3");
-                            cmepInterval.Rows.Clear();
-                        }
+                        //// Bulk load any remaining rows, does not need .3 if we are just dumping records to a database table.
+                        //if (cmepInterval.Rows.Count >= 100000)
+                        //{
+                        //    ToCSV(cmepInterval, csvFilePath + ".3");
+                        //    cmepInterval.Rows.Clear();
+                        //}
                     }
                 }
             }
 
-            // Bulk load any remaining rows
+            // Bulk load any remaining rows, does not need .final if we are just dumping records to a database table.
             if (cmepInterval.Rows.Count > 0)
             {
                 //_dal.BulkInsert(cmepInterval, tableName);
@@ -472,7 +472,11 @@ namespace CMEPParser.NetCoreExample
             }
         }
 
-
+        /// <summary>
+        /// ToCSV writes a datatable to a csv file, 
+        /// </summary>
+        /// <param name="dtDataTable"></param>
+        /// <param name="strFilePath"></param>
         private void ToCSV(DataTable dtDataTable, string strFilePath)
         {
             StreamWriter sw = new StreamWriter(strFilePath, false);
