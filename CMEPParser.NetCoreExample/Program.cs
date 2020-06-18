@@ -8,8 +8,8 @@ namespace CMEPParser.NetCoreExample
         {
             Console.WriteLine("Hello World!");
             CMEPImporter  import = new CMEPImporter();
-            string inputFolder = @"C:\Users\craig\source\repos\CMEPParser.NetCoreExample\CMEPParser.NetCoreExample\CMEPInputFiles";
-            string outPutFile = @"C:\Users\craig\source\repos\CMEPParser.NetCoreExample\CMEPParser.NetCoreExample\CSVOutPutFiles\test.csv";
+            string inputFolder = @"C:\Users\craig\source\repos\CMEPParser.NetCoreExample\CMEPParser.NetCoreExample\";
+            string outPutFile = @"C:\Users\craig\source\repos\CMEPParser.NetCoreExample\CMEPParser.NetCoreExample\test.csv";
             import.Import(inputFolder, outPutFile);
         }
     }
