@@ -1,4 +1,4 @@
-# CMEP Parser Example Client Console App
+# CMEP Parser Example Console App
 
 Requirements
 ------------
