@@ -25,7 +25,7 @@ namespace CMEPParser.NetCoreExample
                 // Process each file found with the import extension
                 foreach (FileInfo fileInfo in fi)
                 {
-                    Debug.Print("Importing CMEP file: " + fileInfo.FullName, "Information");
+                    Console.WriteLine("Importing CMEP file: " + fileInfo.FullName, "Information");
 
                     // Intent is to be a primary key for a database record linking the filename to a record in the database
                     // One might attempt to load a file multiple times... or have same data in different file names (correction files)
@@ -36,19 +36,17 @@ namespace CMEPParser.NetCoreExample
                         // TODO: Log a history of this import somewhere
 
                         // ******************************************
-                        ParseCMEP(fileInfo.FullName, importLogId, csvFilePath);
+                        ParseCMEP(fileInfo.FullName, importLogId, csvFilePath + fileInfo.Name);
                         // ******************************************
 
 
-                        Debug.Print("CMEP" + " import completed.", "Information");
+                        Console.WriteLine("CMEP" + " import completed.", "Information");
 
                         File.Move(fileInfo.FullName,
                                   Path.ChangeExtension(fileInfo.FullName, ".don"));
 
-                        // update the import running time, tracking the lenght of time may provide useful in the future
-                        Debug.Print("running time: hhmmss, date etc..");
-
                         string msg = "CMEP data file " + fileInfo.FullName + " imported. ImportLogId=" + importLogId;
+                        Console.WriteLine(msg);
                     }
                     catch (IOException ex)
                     {
@@ -61,7 +59,6 @@ namespace CMEPParser.NetCoreExample
                             File.Move(fileInfo.FullName,
                                       Path.ChangeExtension(fileInfo.FullName, ".err"));
                             string msg = "CMEP import failed for file " + fileInfo.FullName + ", ImportLogId=" + importLogId + ". Error: " + ex.Message;
-                            //Util.SendAlert(msg, "ImportCMEPFail");
                             throw new Exception(ex.Message);
                         }
                     }
@@ -70,11 +67,10 @@ namespace CMEPParser.NetCoreExample
                         File.Move(fileInfo.FullName,
                                   Path.ChangeExtension(fileInfo.FullName, ".err"));
 
-                        Debug.Print(ex.Message);
+                        Console.WriteLine(ex.Message);
 
                         string msg = "CMEP import failed for file " + fileInfo.FullName + ", ImportLogId=" + importLogId + ". Error: " + ex.Message;
-                        //Util.SendAlert(msg, "ImportCMEPFail");
-
+                        Console.WriteLine(msg);
                         throw new Exception(ex.Message);
                     }
                 }
