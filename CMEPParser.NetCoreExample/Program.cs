@@ -4,6 +4,11 @@ namespace CMEPParser.NetCoreExample
 {
     class Program
     {
+        /// <summary>
+        /// Imports a CMEP file and outputs a CSV file.
+        /// When import is complete the CMEP file .dat is renamed to .don (for done).
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
