@@ -7,6 +7,9 @@ using System.Reflection;
 
 namespace CMEPParser.NetCoreExample
 {
+    /// <summary>
+    /// Class which handles all the parsing of a CMEP file into a CSV file
+    /// </summary>
     class CMEPImporter
     {
 

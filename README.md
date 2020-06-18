@@ -6,7 +6,7 @@ Import a standard CMEP (California Meter Exchanged Protocol) file and output the
 
 Features
 ------------
-TBD
+* Review CMEPImporter.cs for the parsing logic
 
 Command Line Interface Example
 ------------
