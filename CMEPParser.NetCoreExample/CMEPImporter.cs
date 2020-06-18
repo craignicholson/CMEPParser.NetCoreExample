@@ -86,12 +86,49 @@ namespace CMEPParser.NetCoreExample
                               string importLogId,
                               string csvFilePath)
         {
-            // init the table that will hold the intervals.   
+            // init the table that will hold the intervals
+            // look up the data table name columns from the db
             DataTable cmepInterval = new DataTable();
-            for (int i = 0; i < 29; i++)
-            {
-                cmepInterval.Columns.Add(new DataColumn());
-            }
+            //for (int i = 0; i < 29; i++)
+            //{
+            //    cmepInterval.Columns.Add(new DataColumn());
+            //}
+
+            // Add Columns with a name
+            cmepInterval.Columns.Add("ImportlogId");
+            cmepInterval.Columns.Add("readType");
+            cmepInterval.Columns.Add("meterId");
+            cmepInterval.Columns.Add("uom");
+            cmepInterval.Columns.Add("readDate");
+
+            cmepInterval.Columns.Add("readQC");
+            cmepInterval.Columns.Add("readValue");
+            cmepInterval.Columns.Add("touLabel");
+            cmepInterval.Columns.Add("touDataStartTime");
+            cmepInterval.Columns.Add("touDataTimestamp");
+
+            cmepInterval.Columns.Add("recordType");
+            cmepInterval.Columns.Add("recordVersion");
+            cmepInterval.Columns.Add("senderId");
+            cmepInterval.Columns.Add("senderCustomerId");
+            cmepInterval.Columns.Add("receiverId");
+
+            cmepInterval.Columns.Add("receiverCustomerId");
+            cmepInterval.Columns.Add("recordCreateDate");
+            cmepInterval.Columns.Add("purpose");
+            cmepInterval.Columns.Add("commodity");
+            cmepInterval.Columns.Add("constant");
+
+            cmepInterval.Columns.Add("timeInterval");
+            cmepInterval.Columns.Add("season");
+            cmepInterval.Columns.Add("RegisterReadIndicator");
+            cmepInterval.Columns.Add("Line");
+            cmepInterval.Columns.Add("ParentLine0");
+
+            cmepInterval.Columns.Add("ParentLine1");
+            cmepInterval.Columns.Add("ParentLine2");
+            cmepInterval.Columns.Add("ParentLine3");
+            cmepInterval.Columns.Add("ParentLine4");
 
             using (StreamReader sr = File.OpenText(cmepfilePath))
             {

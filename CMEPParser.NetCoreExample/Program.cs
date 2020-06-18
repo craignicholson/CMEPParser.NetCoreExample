@@ -11,11 +11,13 @@ namespace CMEPParser.NetCoreExample
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Import file!");
             CMEPImporter  import = new CMEPImporter();
             string inputFolder = @"C:\Users\craig\source\repos\CMEPParser.NetCoreExample\CMEPParser.NetCoreExample\";
             string outPutFile = @"C:\Users\craig\source\repos\CMEPParser.NetCoreExample\CMEPParser.NetCoreExample\test.csv";
             import.Import(inputFolder, outPutFile);
+            Console.WriteLine("ENTER btn To close!");
+            Console.ReadLine();
         }
     }
 }
