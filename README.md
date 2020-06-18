@@ -14,21 +14,17 @@ One can execute the application from the command line.  Here is an example  you 
 
 Windows
 ```
-C:\> cd "C:\Users\CivilFilingClient\"
-C:\Users\CivilFilingClient> CivilFilingClient.exe "888888005" "P@ssword" "https://dptng.njcourts.gov:2045/civilFilingWS_t" "C:\Files\TestCorp2Corp_MissingBranchID.xml" 
-
-C:\Users\CivilFilingClient> CivilFilingClient.exe "888888005" "P@ssword" "https://dptng.njcourts.gov:2045/civilFilingWS_t" "C:\Files\TestIndivid2Individ.xml" 
-
+TBD
 ```
 
 Mac
 ```
-
+TBD
 ```
 
 Linux
 ```
-
+TBD
 ```
 
 
