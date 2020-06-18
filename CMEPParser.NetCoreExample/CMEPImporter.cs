@@ -123,8 +123,8 @@ namespace CMEPParser.NetCoreExample
             cmepInterval.Columns.Add("season");
             cmepInterval.Columns.Add("RegisterReadIndicator");
             cmepInterval.Columns.Add("Line");
-            cmepInterval.Columns.Add("ParentLine0");
 
+            cmepInterval.Columns.Add("ParentLine0");
             cmepInterval.Columns.Add("ParentLine1");
             cmepInterval.Columns.Add("ParentLine2");
             cmepInterval.Columns.Add("ParentLine3");
